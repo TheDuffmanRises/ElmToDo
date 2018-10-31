@@ -63,7 +63,9 @@ subscriptions model =
 -- VIEW
 view : Model -> Html Msg
 view model =
-    div []
+    div [ class "container" ]
         [ input [ placeholder "To Do", value model.input ] []
         , button [ onClick AddToDo ] [ text "Add To Do" ]
+        , div [][ text "My To Do's" ]
         ]
+
