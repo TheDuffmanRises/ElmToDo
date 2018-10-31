@@ -1,8 +1,6 @@
-port module Main exposing (Entry, Model, main, view)
-
 import Browser
-import Html exposing (Html, button, div, text, Attribute, input)
-import Html.Events exposing (onClick, onInput)
+import Html exposing (..)
+import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 
 
@@ -13,51 +11,59 @@ import Html.Attributes exposing (..)
 
 
 main =
-    Browser.sandbox { init = init, update = update, view = view }
-
+    Browser.element
+        { init = init
+        , update = update
+        , subscriptions = subscriptions
+        , view = view
+        }
 
 
 -- MODEL
 
 
 type alias Model =
-    { entries : List Entry
-    , input : String
-    }
+    { input : String }
 
 
-type alias Entry =
-    { description : String }
-
-
-init : Model
-init =
-    { entries = []
-    , input = ""
-    }
+init : () -> (Model, Cmd Msg)
+init _ =
+    ( Model ""
+    , Cmd.none
+    )
 
 
 
 -- UPDATE
-
-
 type Msg
-    = AddToDo
+    = Input
+    | AddToDo
 
 
-update : Msg -> Model -> Model
+
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
-        AddToDo newEntry ->
-            { model | entry = newEntry }
+        Input ->
+            ( model
+            , Cmd.none )
 
+        AddToDo ->
+            ( model
+            , Cmd.none )
+
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
 
 
 -- VIEW
-
-
 view : Model -> Html Msg
 view model =
     div []
-        [ input [ placeholder "Add To Do", value model.entry, onInput AddToDo ] ] []
-        , div [] [ text model.entry ]
+        [ input [ placeholder "To Do", value model.input ] []
+        , button [ onClick AddToDo ] [ text "Add To Do" ]
+        ]
