@@ -1,4 +1,4 @@
-module Main exposing (Entry, Model, Msg(..), init, main, subscriptions, update, view)
+module Main exposing (Entry, Model, Msg(..), init, main, newEntry, subscriptions, update, view, viewEntries, viewInput)
 
 import Browser
 import Html exposing (..)
@@ -21,8 +21,6 @@ main =
         , view = view
         }
 
-
-
 -- MODEL
 
 
@@ -40,7 +38,7 @@ type alias Entry =
 
 newEntry : String -> Entry
 newEntry desc =
-    { description = desc
+    { description = String
     , completed = False
     }
 
@@ -77,9 +75,10 @@ update msg model =
                 , entries =
                     if String.isEmpty model.field then
                         model.entries
+
                     else
                         model.entries ++ [ newEntry model.field ]
-            }
+              }
             , Cmd.none
             )
 
@@ -109,7 +108,7 @@ viewInput : String -> Html Msg
 viewInput task =
     header
         [ class "header" ]
-        [ h1 [] [ text "todos"]
+        [ h1 [] [ text "todos" ]
         , input
             [ class "new-todo"
             , placeholder "What Needs To Be Done?"
@@ -117,7 +116,7 @@ viewInput task =
             , value task
             , name "newTodo"
             , onInput UpdateField
-            , onEnter AddToDo
+            , onClick AddToDo
             ]
             []
         ]
@@ -125,4 +124,4 @@ viewInput task =
 
 viewEntries : String -> List Entry -> Html Msg
 viewEntries entries =
-    List.map viewEntries
+    List.map viewEntries entries
